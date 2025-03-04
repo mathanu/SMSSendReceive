@@ -65,8 +65,10 @@ app.post('/receive-sms', (req, res) => {
 
 
 // Endpoint to receive SMS
-app.get('/sms-history', (req, res) => {
-    res.json(db.getItem("SMS-DATA")	)
+app.get('/sms-history', async (req, res) => {
+
+  const messages = await client.messages.list({ limit: 20 });
+    res.json(messages	)
 
 });
 
