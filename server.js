@@ -48,14 +48,19 @@ app.post('/send-sms', (req, res) => {
 });
 // Endpoint to receive SMS
 app.post('/receive-sms', (req, res) => {
-  const { From, Body } = req.body;
+  const { from: From, body: Body } = req.body;
+  req.body.to = '+15703619640';
   // You can save the received SMS to a database or perform other actions here
   console.log(`Received SMS from ${From}: ${Body}`);
 
-  db.on('open', function() {
-  
-   res.json(db.get('sms-data'))
-});
+  let data = db.getItem('SMS-DATA');
+  if(data)
+    data.push(req.body)
+  else
+  data = [req.body]
+
+  db.setItem("SMS-DATA",data);
+
 });
 
 
